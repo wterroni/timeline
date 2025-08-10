@@ -1,12 +1,13 @@
 # Timeline App
 
 ## Time Spent
-Approximately 3 hours and 20 minutes were spent on this assignment, distributed as follows:
+Approximately 3 hours and 30 minutes were spent on this assignment, distributed as follows:
 - 15 minutes: Initial project analysis and architecture planning
 - 45 minutes: Project restructuring, applying Clean Architecture, and implementing dependency injection
 - 1 hour: Implementation of core timeline functionality and swimlane algorithm
 - 1 hour: UI refinement, testing, and documentation
 - 20 minutes: Implementation of unit tests for all architectural layers
+- 10 minutes: Implementation of accessibility features
 
 ## Implementation Details
 
@@ -33,6 +34,12 @@ Approximately 3 hours and 20 minutes were spent on this assignment, distributed 
    - UseCase tests to validate business logic
    - DataSource tests to confirm data integrity
 
+8. **Accessibility Features**: Added comprehensive content descriptions for screen readers:
+   - Timeline components have descriptive labels
+   - Events include detailed information about dates and duration
+   - Navigation instructions for zoom and scroll functionality
+   - Proper semantic structure for assistive technologies
+
 ### What I Would Change
 
 If I had more time, I'd rethink the UI to deliver a more polished experience with better accessibility. 
@@ -50,6 +57,8 @@ The timeline design was inspired by several popular project management tools lik
 3. **Proportional Event Sizing**: Events are sized proportionally to their duration, providing visual cues about event length.
 
 4. **Minimal Visual Clutter**: The UI focuses on essential information, with additional details available on demand.
+
+5. **Accessibility First**: Content descriptions and semantic properties were added to ensure the app is usable with screen readers and other assistive technologies.
 
 ## Testing Strategy
 
@@ -73,6 +82,7 @@ With more time, I would also implement:
    - Test timeline rendering with different datasets
    - Test user interactions like scrolling and tapping events
    - Test responsive layout on different screen sizes
+   - Test accessibility features with automated accessibility testing tools
 
 3. **Performance Tests**:
    - Test with large datasets to ensure smooth scrolling

@@ -14,8 +14,6 @@ val appModule = module {
     single<EventDataSource> { SampleEventDataSource() }
 
     // Repositories
-
-    // Repositories
     single<EventRepository> { EventRepositoryImpl(get()) }
     
     // Use Cases

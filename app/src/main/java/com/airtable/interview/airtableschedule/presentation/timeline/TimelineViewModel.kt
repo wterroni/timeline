@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
 class TimelineViewModel(
-    private val getEventsUseCase: GetEventsUseCase
+    getEventsUseCase: GetEventsUseCase
 ) : ViewModel() {
 
     val uiState: StateFlow<TimelineUiState> = getEventsUseCase()
