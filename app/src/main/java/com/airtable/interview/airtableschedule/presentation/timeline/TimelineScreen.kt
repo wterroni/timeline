@@ -27,6 +27,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextOverflow
@@ -78,7 +80,6 @@ private fun SimpleHorizontalTimeline(
     val maxDate = TimelineUtils.maxDate(all)
     val totalDays = TimelineUtils.daysInclusive(minDate, maxDate)
 
-    // Zoom state
     var scale by remember { mutableFloatStateOf(1f) }
     val minScale = 0.5f
     val maxScale = 2.0f
@@ -95,11 +96,13 @@ private fun SimpleHorizontalTimeline(
     val scroll = rememberScrollState()
 
     Column(Modifier.fillMaxWidth()) {
-        // Zoom indicator
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 8.dp),
+                .padding(bottom = 8.dp)
+                .semantics {
+                    contentDescription = "Zoom level is ${(scale * 100).toInt()} percent"
+                },
             contentAlignment = Alignment.Center
         ) {
             Text(
@@ -116,7 +119,10 @@ private fun SimpleHorizontalTimeline(
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(laneHeight),
+                            .height(laneHeight)
+                            .semantics {
+                                contentDescription = "Lane ${idx + 1}"
+                            },
                         contentAlignment = Alignment.Center
                     ) {
                         Text("${idx + 1}", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
@@ -128,6 +134,9 @@ private fun SimpleHorizontalTimeline(
                     .weight(1f)
                     .transformable(state = transformableState)
                     .horizontalScroll(scroll)
+                    .semantics {
+                        contentDescription = "Timeline with ${events.size} events from ${SimpleDateFormat("MMM dd, yyyy", Locale.getDefault()).format(minDate)} to ${SimpleDateFormat("MMM dd, yyyy", Locale.getDefault()).format(maxDate)}. Pinch to zoom, scroll horizontally to navigate."
+                    }
             ) {
                 TimeScaleAdaptive(minDate, totalDays, dayWidth, scaleHeight, totalWidth)
                 lanes.forEach { lane ->
@@ -254,6 +263,10 @@ private fun EventBlock(
     val padH = with(LocalDensity.current) { (8.dp * 2).toPx() }
     val chipDesired = with(LocalDensity.current) { (layout.size.width + padH).toDp() }
     val containerWidth = maxOf(width, chipDesired.coerceAtMost(chipMaxWidth))
+    
+    val dfFull = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
+    val days = TimelineUtils.daysInclusive(event.startDate, event.endDate)
+    val durationText = if (days == 1) "1 day" else "$days days"
 
     Box(
         modifier = modifier
@@ -273,7 +286,10 @@ private fun EventBlock(
             onClick = onClick,
             shape = RoundedCornerShape(12.dp),
             colors = CardDefaults.cardColors(containerColor = pill),
-            elevation = CardDefaults.cardElevation(0.dp)
+            elevation = CardDefaults.cardElevation(0.dp),
+            modifier = Modifier.semantics {
+                contentDescription = "${event.name}, from ${dfFull.format(event.startDate)} to ${dfFull.format(event.endDate)}, duration: $durationText. Tap for details."
+            }
         ) {
             Box(Modifier.padding(horizontal = 8.dp, vertical = 4.dp)) {
                 Text(
@@ -292,7 +308,15 @@ private fun EventBlock(
 private fun EventDetailsContent(event: Event) {
     val dfFull = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
     val days = TimelineUtils.daysInclusive(event.startDate, event.endDate)
-    Column(Modifier.fillMaxWidth().padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+    Column(
+        Modifier
+            .fillMaxWidth()
+            .padding(20.dp)
+            .semantics {
+                contentDescription = "Event details for ${event.name}, from ${dfFull.format(event.startDate)} to ${dfFull.format(event.endDate)}, duration: ${if (days == 1) "1 day" else "$days days"}"
+            },
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
         Text(event.name, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
         Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
             Column(Modifier.weight(1f)) {
@@ -304,7 +328,9 @@ private fun EventDetailsContent(event: Event) {
                 Text(dfFull.format(event.endDate), style = MaterialTheme.typography.bodyMedium)
             }
         }
-        Text("Duration: ${days} days", style = MaterialTheme.typography.bodyMedium)
-        Spacer(Modifier.height(8.dp))
+        Column {
+            Text("Duration", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text(if (days == 1) "1 day" else "$days days", style = MaterialTheme.typography.bodyMedium)
+        }
     }
 }
