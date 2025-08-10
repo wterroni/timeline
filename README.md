@@ -1,11 +1,12 @@
 # Timeline App
 
 ## Time Spent
-Approximately 3 hours were spent on this assignment, distributed as follows:
+Approximately 3 hours and 20 minutes were spent on this assignment, distributed as follows:
 - 15 minutes: Initial project analysis and architecture planning
 - 45 minutes: Project restructuring, applying Clean Architecture, and implementing dependency injection
 - 1 hour: Implementation of core timeline functionality and swimlane algorithm
 - 1 hour: UI refinement, testing, and documentation
+- 20 minutes: Implementation of unit tests for all architectural layers
 
 ## Implementation Details
 
@@ -26,11 +27,17 @@ Approximately 3 hours were spent on this assignment, distributed as follows:
 
 6. **Zoom Functionality**: Implemented pinch-to-zoom capability for the timeline, allowing users to zoom in for detailed views or zoom out for a broader perspective.
 
+7. **Comprehensive Unit Tests**: Implemented unit tests for all architectural layers:
+   - Repository tests to verify data flow
+   - ViewModel tests to ensure proper state management
+   - UseCase tests to validate business logic
+   - DataSource tests to confirm data integrity
+
 ### What I Would Change
 
-If I had more time, I’d rethink the UI to deliver a more polished experience with better accessibility. 
-Timelines tend to work best in horizontal layouts, but that pattern doesn’t translate well to phones. 
-I spent a good amount of time exploring vertical approaches, but the usability wasn’t great.
+If I had more time, I'd rethink the UI to deliver a more polished experience with better accessibility. 
+Timelines tend to work best in horizontal layouts, but that pattern doesn't translate well to phones. 
+I spent a good amount of time exploring vertical approaches, but the usability wasn't great.
 
 ## Design Decisions
 
@@ -46,23 +53,28 @@ The timeline design was inspired by several popular project management tools lik
 
 ## Testing Strategy
 
-With more time, I would implement the following testing approach:
+The project includes comprehensive unit tests for all architectural layers:
 
-1. **Unit Tests**:
-   - Test the swimlane algorithm with various event configurations
-   - Test date calculations and utilities
-   - Test repository and use case implementations
+1. **Repository Tests**: Verify that the repository correctly delegates to the data source and returns the expected data.
 
-2. **Integration Tests**:
+2. **ViewModel Tests**: Ensure that the ViewModel properly manages state and processes data from the use case.
+
+3. **UseCase Tests**: Validate that the use case correctly interacts with the repository.
+
+4. **DataSource Tests**: Confirm that the data source provides valid and well-formed data.
+
+With more time, I would also implement:
+
+1. **Integration Tests**:
    - Test the interaction between repositories, data sources, and use cases
    - Test ViewModel state management
 
-3. **UI Tests**:
+2. **UI Tests**:
    - Test timeline rendering with different datasets
    - Test user interactions like scrolling and tapping events
    - Test responsive layout on different screen sizes
 
-4. **Performance Tests**:
+3. **Performance Tests**:
    - Test with large datasets to ensure smooth scrolling
    - Test memory usage during extended use
 
